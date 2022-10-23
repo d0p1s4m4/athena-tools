@@ -1,0 +1,10 @@
+(menhir
+ (modules parser))
+
+(ocamllex scanner)
+
+(library
+ (name athena)
+ (modules scanner parser ast athena)
+ (instrumentation
+  (backend bisect_ppx)))

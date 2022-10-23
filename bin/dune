@@ -1,0 +1,6 @@
+(executables
+ (public_names athena-as athena-disas)
+ (names as disas)
+ (libraries cmdliner athena)
+ (instrumentation
+  (backend bisect_ppx)))

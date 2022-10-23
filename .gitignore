@@ -1,3 +1,5 @@
 *.o
 ./as
 ./disas
+_build/
+a.out
