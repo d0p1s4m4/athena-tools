@@ -9,7 +9,7 @@ let read_file file =
   close_in ch;
   s
 
-let compile_file file = 
-  let f = if Filename.check_suffix file ".S" then (preprocess file) else file in
+let compile_file file =
+  let f = if Filename.check_suffix file ".S" then preprocess file else file in
   let s = read_file f in
- Ast.dump (Parser.program Scanner.tokenize (Lexing.from_string s))
+  Dump.dump (Parser.program Scanner.tokenize (Lexing.from_string s))

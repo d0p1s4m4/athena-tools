@@ -9,7 +9,7 @@
 %token BLT BLTZ BNE BNEZ CALL DIV DIVU JMP LIH MOD MODU
 %token MULT MULTU NOP NOR OR ORI SLL SLLR SRA SRAR SRL SRLR
 %token SUB SUBI SUBIU SUBU XOR XORI TRAP LB LBU SB LH LHU
-%token SH LW SW MVSRR MVSRW B
+%token SH LW SW MVSRR MVSRW B LA
 %token R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14 R15
 %token R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29
 %token R30 R31
@@ -52,6 +52,7 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| DIV register COMMA register COMMA register { Div($2, $4, $6) }
 	| DIVU register COMMA register COMMA register { Div($2, $4, $6) }
 	| JMP full_address { Jmp($2) }
+	| LA register COMMA relative_address { La($2, $4) }
 	| LIH register COMMA immediat { Lih($2, $4) }
 	| MOD register COMMA register COMMA register { Mod($2, $4, $6) }
 	| MODU register COMMA register COMMA register { Modu($2, $4, $6) }
@@ -74,24 +75,25 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| TRAP { Trap }
 	| XOR register COMMA register COMMA register { Xor($2, $4, $6) }
 	| XORI register COMMA register COMMA immediat { Xori($2, $4, $6) }
-	| LB register COMMA offset LPAREN register RPAREN { Lb($2, $4, $6) }
-	| LBU register COMMA offset LPAREN register RPAREN { Lbu($2, $4, $6) }
-	| LH register COMMA offset LPAREN register RPAREN { Lh($2, $4, $6) }
-	| LHU register COMMA offset LPAREN register RPAREN { Lhu($2, $4, $6) }
-	| LW register COMMA offset LPAREN register RPAREN { Lw($2, $4, $6) }
-	| SB offset LPAREN register RPAREN register { Sb($4, $2, $6) }
-	| SH offset LPAREN register RPAREN register { Sh($4, $2, $6) }
-	| SW offset LPAREN register RPAREN register { Sw($4, $2, $6) }
+	| LB register COMMA full_address { Lb($2, $4) }
+	| LBU register COMMA full_address { Lbu($2, $4) }
+	| LH register COMMA full_address { Lh($2, $4) }
+	| LHU register COMMA full_address { Lhu($2, $4) }
+	| LW register COMMA full_address { Lw($2, $4) }
+	| SB full_address COMMA register { Sb($2, $4) }
+	| SH full_address COMMA register { Sh($2, $4) }
+	| SW full_address COMMA register { Sw($2, $4) }
 	| MVSRR register COMMA special_register { Mvsrr($2, $4) }
 	| MVSRW special_register COMMA register { Mvsrw($2, $4) }
 	;
 
 relative_address: INT { Raw($1) }
-	| IDENT { RelativeLabel($1) }
+	| IDENT { RLabel($1) }
 	;
 
 full_address: offset LPAREN register RPAREN { RegOffset($3, $1) }
-	| IDENT { Label($1) }
+	| IDENT { FLabel($1) }
+	| register { RegOffset($1, 0) }
 	;
 
 directive: ORG INT { Org($2) }

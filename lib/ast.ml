@@ -1,12 +1,7 @@
-type relative_address =
-  | Raw of int
-  | RelativeLabel of string
+type relative_address = Raw of int | RLabel of string
+type full_address = RegOffset of int * int | FLabel of string
 
-type full_address =
-  | RegOffset of int * int
-  | Label of string
-
-type instruction = 
+type instruction =
   | Add of int * int * int
   | Addi of int * int * int
   | Addiu of int * int * int
@@ -21,15 +16,25 @@ type instruction =
   | Div of int * int * int
   | Divu of int * int * int
   | Jmp of full_address
+  | La of int * relative_address (* pseudo instr *)
+  | Lb of int * full_address
+  | Lbu of int * full_address 
+  | Lh of int * full_address 
+  | Lhu of int * full_address 
   | Lih of int * int
+  | Lw of int * full_address
   | Mod of int * int * int
   | Modu of int * int * int
   | Mult of int * int * int * int
   | Multu of int * int * int * int
+  | Mvsrr of int * int
+  | Mvsrw of int * int
   | Nop
   | Nor of int * int * int
   | Or of int * int * int
   | Ori of int * int * int
+  | Sb of full_address * int
+  | Sh of full_address * int
   | Sll of int * int * int
   | Sllr of int * int * int
   | Sra of int * int * int
@@ -40,21 +45,10 @@ type instruction =
   | Subi of int * int * int
   | Subiu of int * int * int
   | Subu of int * int * int
+  | Sw of full_address * int
   | Trap
   | Xor of int * int * int
   | Xori of int * int * int
-  | Lb of int * int * int
-  | Lbu of int * int * int
-  | Sb of int * int * int
-  | Sbu of int * int * int
-  | Lh of int * int * int
-  | Lhu of int * int * int
-  | Sh of int * int * int
-  | Shu of int * int * int
-  | Lw of int * int * int
-  | Sw of int * int * int
-  | Mvsrr of int * int
-  | Mvsrw of int * int
 
 type directive =
   | Org of int
@@ -72,31 +66,9 @@ type directive =
   | Include of string
   | Section of string
 
-type stmt = Instruction of instruction
-   | Directive of directive
-   | Label of string
+type stmt =
+  | Instruction of instruction
+  | Directive of directive
+  | Label of string
 
 type program = Program of stmt list
-
-let dump_directive directive =
-  match directive with
-  | Org addr -> ".org " ^ string_of_int addr
-  | Incbin file -> ".incbin " ^ file
-  | Align align -> ".align " ^ string_of_int align
-  | _ -> "(todo)"
-  
-let dump_reg reg = 
-  "r" ^ string_of_int reg
-
-let dump_instruction instruction =
-  match instruction with
-  | Ori (ra, rb, imm) -> "ori " ^ (dump_reg ra) ^ " " ^ (dump_reg rb) ^ " " ^ string_of_int imm ^ ")"
-  | _ -> "(todo)"
-
-let dump_stmt stmt =  
-  match stmt with
-  | Directive directive -> dump_directive directive
-  | Instruction instruction -> dump_instruction instruction
-  | Label label -> label ^ ":"
-
-let dump (Program stmts) = String.concat "\n" (List.map dump_stmt stmts)

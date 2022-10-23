@@ -28,6 +28,7 @@
                 "div", DIV;
                 "divu", DIVU;
                 "jmp", JMP;
+                "la", LA;
                 "lb", LB;
                 "lbu", LBU;
                 "lh", LH;
@@ -137,7 +138,7 @@
 let digit = ['0' - '9']
 let alpha = ['a' - 'z' 'A' - 'Z']
 let sign = ['-' '+']
-let hexvalue = "0x" ['A' - 'F' 'a' - 'f' '0' - '9']
+let hexvalue = "0x" ['A' - 'F' 'a' - 'f' '0' - '9']+
 
 let integer = sign? digit+
 
@@ -160,7 +161,7 @@ rule tokenize = parse
                     try Hashtbl.find directive_tbl instr 
                     with Not_found -> IDENT instr
         }
-    | hexvalue { INT (int_of_string (Lexing.lexeme lexbuf ))}
+    | hexvalue { INT (int_of_string (Lexing.lexeme lexbuf))}
 	| integer { INT (int_of_string (Lexing.lexeme lexbuf))}
 	| whitespace { tokenize lexbuf }
 	| eof { EOF }
