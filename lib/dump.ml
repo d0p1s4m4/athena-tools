@@ -62,6 +62,7 @@ let dump_instruction instruction =
   | Lbu (ra, addr) -> "lbu " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Lh (ra, addr) -> "lh " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Lhu (ra, addr) -> "lhu " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
+  | Li (ra, value) -> "li " ^ dump_reg ra ^ ", " ^  string_of_int value
   | Lih (ra, imm) -> "lih " ^ dump_reg ra ^ ", " ^ string_of_int imm
   | Lw (ra, addr) -> "lw " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Mod (ra, rb, rc) -> "mod " ^ dump_r_format ra rb rc

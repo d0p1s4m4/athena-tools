@@ -4,17 +4,25 @@
 
 %token <int> INT
 %token <string> STRING IDENT
+(* asm directives *)
 %token ORG INCBIN SECTION ALIGN EXTERN GLOBAL INCLUDE
-%token ADD ADDI ADDIU ADDU AND ANDI BEQ BEQZ BGT BGTZ
-%token BLT BLTZ BNE BNEZ CALL DIV DIVU JMP LIH MOD MODU
+(* instructions *)
+%token ADD ADDI ADDIU ADDU AND ANDI BEQ BGT 
+%token BLT BNE CALL DIV DIVU JMP LIH MOD MODU
 %token MULT MULTU NOP NOR OR ORI SLL SLLR SRA SRAR SRL SRLR
 %token SUB SUBI SUBIU SUBU XOR XORI TRAP LB LBU SB LH LHU
-%token SH LW SW MVSRR MVSRW B LA
+%token SH LW SW MVSRR MVSRW
+(* pseudo instructions *)
+%token B BEQZ BGTZ BLTZ BNEZ LA LI
+(* register *)
 %token R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14 R15
 %token R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29
 %token R30 R31
+(* special register *)
 %token SR_ISA SR_VENDORID SR_STATUS SR_TRAPVEC SR_INTEN SR_EPC
 %token SR_CAUSE
+
+(* other *)
 %token COMMA LPAREN RPAREN COLON EOF
 
 %start <Ast.program> program
@@ -53,6 +61,7 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| DIVU register COMMA register COMMA register { Div($2, $4, $6) }
 	| JMP full_address { Jmp($2) }
 	| LA register COMMA relative_address { La($2, $4) }
+	| LI register COMMA INT { Li($2, $4) }
 	| LIH register COMMA immediat { Lih($2, $4) }
 	| MOD register COMMA register COMMA register { Mod($2, $4, $6) }
 	| MODU register COMMA register COMMA register { Modu($2, $4, $6) }

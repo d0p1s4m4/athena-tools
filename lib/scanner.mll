@@ -33,6 +33,7 @@
                 "lbu", LBU;
                 "lh", LH;
                 "lhu", LHU;
+                "li", LI;
                 "lih", LIH;
                 "lw", LW;
                 "mod", MOD;

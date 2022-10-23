@@ -20,7 +20,8 @@ type instruction =
   | Lb of int * full_address
   | Lbu of int * full_address 
   | Lh of int * full_address 
-  | Lhu of int * full_address 
+  | Lhu of int * full_address
+  | Li of int * int (* pseudo instr *)
   | Lih of int * int
   | Lw of int * full_address
   | Mod of int * int * int
