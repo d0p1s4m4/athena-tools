@@ -34,6 +34,7 @@ let dump_abs_addr addr =
 
 let dump_instruction instruction =
   match instruction with
+  | Add (0, 0, 0) -> "nop"
   | Add (ra, rb, rc) -> "add " ^ dump_r_format ra rb rc
   | Addi (ra, rb, imm) -> "addi " ^ dump_i_format ra rb imm
   | Addiu (ra, rb, imm) -> "addiu " ^ dump_i_format ra rb imm
@@ -75,7 +76,6 @@ let dump_instruction instruction =
       ^ dump_reg rd
   | Mvsrr (ra, sr) -> "mvsrr " ^ dump_reg ra ^ ", " ^ dump_spe_reg sr
   | Mvsrw (sr, ra) -> "mvsrw " ^ dump_spe_reg sr ^ ", " ^ dump_reg ra
-  | Nop -> "nop"
   | Nor (ra, rb, rc) -> "nor " ^ dump_r_format ra rb rc
   | Or (ra, rb, rc) -> "or " ^ dump_r_format ra rb rc
   | Ori (ra, rb, imm) -> "ori " ^ dump_i_format ra rb imm

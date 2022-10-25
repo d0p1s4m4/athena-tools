@@ -30,7 +30,6 @@ type instruction =
   | Multu of int * int * int * int
   | Mvsrr of int * int
   | Mvsrw of int * int
-  | Nop
   | Nor of int * int * int
   | Or of int * int * int
   | Ori of int * int * int

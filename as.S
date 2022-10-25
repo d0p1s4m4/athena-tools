@@ -9,6 +9,8 @@ add r3, r1, r2
 
 subi r4, r3, 23
 
+li r5, 0xFFD
+
 bne r4, r1, 7
 call 40(zero)
 
@@ -21,6 +23,8 @@ addi r1, r2, 78
 addiu r1, r2, 894
 
 addu r1, r2, r6
+
+li r8, 0xFFFF1111
 
 and r1, r2, r3
 
