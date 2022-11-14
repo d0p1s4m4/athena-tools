@@ -12,9 +12,7 @@ let dump_directive directive =
 let dump_reg reg = "r" ^ string_of_int reg
 
 let dump_spe_reg sr =
-  let sr_str =
-    [ "isa"; "vendorid"; "status"; "trapvec"; "inten"; "epc"; "cause" ]
-  in
+  let sr_str = [ "isa"; "cause"; "status"; "trapvec"; "epc" ] in
   List.nth sr_str sr
 
 let dump_r_format ra rb rc =
@@ -45,12 +43,16 @@ let dump_instruction instruction =
   | Beq (ra, 0, addr) -> "beqz " ^ dump_reg ra ^ dump_rel_addr addr
   | Beq (ra, rb, addr) ->
       "beq " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
-  | Bgt (ra, 0, addr) -> "bgtz " ^ dump_reg ra ^ dump_rel_addr addr
-  | Bgt (ra, rb, addr) ->
-      "bgt " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
+  | Bge (ra, 0, addr) -> "bgez " ^ dump_reg ra ^ dump_rel_addr addr
+  | Bge (ra, rb, addr) ->
+      "bge " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
+  | Bgeu (ra, rb, addr) ->
+      "bgeu " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
   | Blt (ra, 0, addr) -> "bltz " ^ dump_reg ra ^ dump_rel_addr addr
   | Blt (ra, rb, addr) ->
       "blt " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
+  | Bltu (ra, rb, addr) ->
+      "bltu " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
   | Bne (ra, 0, addr) -> "bnez " ^ dump_reg ra ^ dump_rel_addr addr
   | Bne (ra, rb, addr) ->
       "bne " ^ dump_reg ra ^ ", " ^ dump_reg rb ^ ", " ^ dump_rel_addr addr
@@ -58,12 +60,12 @@ let dump_instruction instruction =
   | Div (ra, rb, rc) -> "div " ^ dump_r_format ra rb rc
   | Divu (ra, rb, rc) -> "divu " ^ dump_r_format ra rb rc
   | Jmp addr -> "jmp " ^ dump_abs_addr addr
-  | La (ra, addr) -> "la " ^ dump_reg ra ^ ", " ^ dump_rel_addr addr
+  | La (ra, addr) -> "la " ^ dump_reg ra ^ ", " ^ addr
   | Lb (ra, addr) -> "lb " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Lbu (ra, addr) -> "lbu " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Lh (ra, addr) -> "lh " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Lhu (ra, addr) -> "lhu " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
-  | Li (ra, value) -> "li " ^ dump_reg ra ^ ", " ^  string_of_int value
+  | Li (ra, value) -> "li " ^ dump_reg ra ^ ", " ^ string_of_int value
   | Lih (ra, imm) -> "lih " ^ dump_reg ra ^ ", " ^ string_of_int imm
   | Lw (ra, addr) -> "lw " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
   | Mod (ra, rb, rc) -> "mod " ^ dump_r_format ra rb rc

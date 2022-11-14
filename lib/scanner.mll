@@ -18,9 +18,14 @@
                 "b", B;
                 "beq", BEQ;
                 "beqz", BEQZ;
+                "bge", BGE;
+                "bgeu", BGEU;
+                "bgez", BGEZ;
                 "bgt", BGT;
+                "bgtu", BGTU;
                 "bgtz", BGTZ;
                 "blt", BLT;
+                "bltu", BLTU;
                 "bltz", BLTZ;
                 "bne", BNE;
                 "bnez", BNEZ;
@@ -38,6 +43,7 @@
                 "lw", LW;
                 "mod", MOD;
                 "modu", MODU;
+                "move", MOVE;
                 "mult", MULT;
                 "multu", MULTU;
                 "mvsrr", MVSRR;
@@ -71,6 +77,8 @@
                 ".include", INCLUDE;
                 ".extern", EXTERN;
                 ".global", GLOBAL;
+                ".skip", SKIP;
+                ".align", ALIGN;
         ];
         List.iter (fun (name, register) ->
             Hashtbl.add register_tbl name register) [
@@ -127,11 +135,8 @@
 
                 (* special registers *)
                 "isa", SR_ISA ;
-                "vendorid", SR_VENDORID;
                 "status", SR_STATUS;
                 "trapvec", SR_TRAPVEC;
-                "inten", SR_INTEN;
-                "epc", SR_EPC;
                 "cause", SR_CAUSE;
         ]
 }

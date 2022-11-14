@@ -1,6 +1,12 @@
 #define A 50
 #define B 954
 
+.section bss
+.align 16
+stack_bottom:
+.skip 16384
+stack_top:
+
 start:
 
 ori r1, zero, A
@@ -25,6 +31,9 @@ addiu r1, r2, 894
 addu r1, r2, r6
 
 li r8, 0xFFFF1111
+
+la r7, start
+move r5, r7
 
 and r1, r2, r3
 

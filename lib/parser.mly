@@ -6,20 +6,22 @@
 %token <string> STRING IDENT
 (* asm directives *)
 %token ORG INCBIN SECTION ALIGN EXTERN GLOBAL INCLUDE
+%token SKIP
 (* instructions *)
-%token ADD ADDI ADDIU ADDU AND ANDI BEQ BGT 
-%token BLT BNE CALL DIV DIVU JMP LIH MOD MODU
+%token ADD ADDI ADDIU ADDU AND ANDI BEQ BGE BGEU
+%token BLT BLTU BNE CALL DIV DIVU JMP LIH MOD MODU MOVE
 %token MULT MULTU NOR OR ORI SLL SLLR SRA SRAR SRL SRLR
 %token SUB SUBI SUBIU SUBU XOR XORI TRAP LB LBU SB LH LHU
 %token SH LW SW MVSRR MVSRW
 (* pseudo instructions *)
-%token B BEQZ BGTZ BLTZ BNEZ LA LI NOP
+%token B BEQZ BGEZ BGT BGTU BGTZ BLTZ 
+%token BNEZ LA LI NOP
 (* register *)
 %token R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14 R15
 %token R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29
 %token R30 R31
 (* special register *)
-%token SR_ISA SR_VENDORID SR_STATUS SR_TRAPVEC SR_INTEN SR_EPC
+%token SR_ISA  SR_STATUS SR_TRAPVEC SR_EPC
 %token SR_CAUSE
 
 (* other *)
@@ -50,9 +52,14 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| B relative_address { Beq(0, 0, $2) }
 	| BEQ register COMMA register COMMA relative_address { Beq($2, $4, $6) }
 	| BEQZ register COMMA relative_address { Beq($2, 0, $4) }
-	| BGT register COMMA register COMMA relative_address { Bgt($2, $4, $6) }
-	| BGTZ register COMMA relative_address { Bgt($2, 0, $4) }
+	| BGE register COMMA register COMMA relative_address { Bge($2, $4, $6) }
+	| BGEZ register COMMA relative_address { Bge($2, 0, $4) }
+	| BGEU register COMMA register COMMA relative_address { Bgeu($2, $4, $6) }
+	| BGT register COMMA register COMMA relative_address { Blt($4, $2, $6) }
+	| BGTU register COMMA register COMMA relative_address { Bltu($4, $2, $6) }
+	| BGTZ register COMMA relative_address { Blt(0, $2, $4) }
 	| BLT register COMMA register COMMA relative_address { Blt($2, $4, $6) }
+	| BLTU register COMMA register COMMA relative_address { Bltu($2, $4, $6) }
 	| BLTZ register COMMA relative_address { Blt($2, 0, $4) }
 	| BNE register COMMA register COMMA relative_address { Bne($2, $4, $6) }
 	| BNEZ register COMMA relative_address { Bne($2, 0, $4) }
@@ -60,11 +67,12 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| DIV register COMMA register COMMA register { Div($2, $4, $6) }
 	| DIVU register COMMA register COMMA register { Div($2, $4, $6) }
 	| JMP full_address { Jmp($2) }
-	| LA register COMMA relative_address { La($2, $4) }
+	| LA register COMMA IDENT { La($2, $4) }
 	| LI register COMMA INT { Li($2, $4) }
 	| LIH register COMMA immediat { Lih($2, $4) }
 	| MOD register COMMA register COMMA register { Mod($2, $4, $6) }
 	| MODU register COMMA register COMMA register { Modu($2, $4, $6) }
+	| MOVE register COMMA register { Or($2, 0, $4) }
 	| MULT register COMMA register COMMA register COMMA register { Mult($2, $4, $6, $8) }
 	| MULTU register COMMA register COMMA register COMMA register { Multu($2, $4, $6, $8) }
 	| NOP { Add(0, 0, 0) }
@@ -112,6 +120,7 @@ directive: ORG INT { Org($2) }
 	| EXTERN IDENT { Extern($2) }
 	| GLOBAL IDENT { Global($2) }
 	| INCLUDE STRING { Include($2) }
+	| SKIP INT { Skip($2) }
 	;
 
 immediat: INT { $1 }
@@ -124,12 +133,10 @@ offset: INT { $1 }
 	;
 
 special_register: SR_ISA { 0 }
-	| SR_VENDORID { 1 }
-	| SR_STATUS { 2 }
+	| SR_STATUS { 1 }
+	| SR_CAUSE { 2 }
 	| SR_TRAPVEC { 3 }
-	| SR_INTEN { 4 }
-	| SR_EPC { 5 }
-	| SR_CAUSE { 6 }
+	| SR_EPC { 4 }
 	;
 
 register: R0 { 0 }

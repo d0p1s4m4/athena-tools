@@ -9,17 +9,19 @@ type instruction =
   | And of int * int * int
   | Andi of int * int * int
   | Beq of int * int * relative_address
-  | Bgt of int * int * relative_address
+  | Bge of int * int * relative_address
+  | Bgeu of int * int * relative_address
   | Blt of int * int * relative_address
+  | Bltu of int * int * relative_address
   | Bne of int * int * relative_address
   | Call of full_address
   | Div of int * int * int
   | Divu of int * int * int
   | Jmp of full_address
-  | La of int * relative_address (* pseudo instr *)
+  | La of int * string
   | Lb of int * full_address
-  | Lbu of int * full_address 
-  | Lh of int * full_address 
+  | Lbu of int * full_address
+  | Lh of int * full_address
   | Lhu of int * full_address
   | Li of int * int (* pseudo instr *)
   | Lih of int * int
@@ -65,6 +67,7 @@ type directive =
   | Global of string
   | Include of string
   | Section of string
+  | Skip of int
 
 type stmt =
   | Instruction of instruction

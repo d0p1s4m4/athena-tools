@@ -12,4 +12,6 @@ let read_file file =
 let compile_file file =
   let f = if Filename.check_suffix file ".S" then preprocess file else file in
   let s = read_file f in
-  Dump.dump (Parser.program Scanner.tokenize (Lexing.from_string s))
+  let ast = Parser.program Scanner.tokenize (Lexing.from_string s) in
+  let ops = Resolve.resolve_to_opcode ast in
+  Dump.dump (Resolve.resolve_to_ast ops)
