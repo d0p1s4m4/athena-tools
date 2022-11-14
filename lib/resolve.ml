@@ -73,6 +73,7 @@ let resolve_instruction instr pc =
   | Nor (ra, rb, rc) -> (pc + 4, [ Opcode.opcode_nor ra rb rc ])
   | Or (ra, rb, rc) -> (pc + 4, [ Opcode.opcode_or ra rb rc ])
   | Ori (ra, rb, imm) -> (pc + 4, [ Opcode.opcode_ori ra rb imm ])
+  | Rett -> (pc + 4, [ Opcode.opcode_rett ])
   | Sb (RegOffset (r, o), ra) -> (pc + 4, [ Opcode.opcode_store ra r 0 o ])
   | Sh (RegOffset (r, o), ra) -> (pc + 4, [ Opcode.opcode_store ra r 1 o ])
   | Sll (ra, rb, shamt) -> (pc + 4, [ Opcode.opcode_sll ra rb shamt ])
@@ -86,6 +87,13 @@ let resolve_instruction instr pc =
   | Subiu (ra, rb, imm) -> (pc + 4, [ Opcode.opcode_subiu ra rb imm ])
   | Subu (ra, rb, rc) -> (pc + 4, [ Opcode.opcode_subu ra rb rc ])
   | Sw (RegOffset (r, o), ra) -> (pc + 4, [ Opcode.opcode_store ra r 2 o ])
+  | Swap (ra, rb) ->
+      ( pc + 12,
+        [
+          Opcode.opcode_xor ra ra rb;
+          Opcode.opcode_xor rb ra rb;
+          Opcode.opcode_xor ra ra rb;
+        ] )
   | Trap -> (pc + 4, [ Opcode.opcode_trap ])
   | Xor (ra, rb, rc) -> (pc + 4, [ Opcode.opcode_xor ra rb rc ])
   | Xori (ra, rb, imm) -> (pc + 4, [ Opcode.opcode_xori ra rb imm ])

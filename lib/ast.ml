@@ -35,6 +35,7 @@ type instruction =
   | Nor of int * int * int
   | Or of int * int * int
   | Ori of int * int * int
+  | Rett
   | Sb of full_address * int
   | Sh of full_address * int
   | Sll of int * int * int
@@ -48,6 +49,7 @@ type instruction =
   | Subiu of int * int * int
   | Subu of int * int * int
   | Sw of full_address * int
+  | Swap of int * int
   | Trap
   | Xor of int * int * int
   | Xori of int * int * int

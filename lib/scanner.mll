@@ -43,7 +43,7 @@
                 "lw", LW;
                 "mod", MOD;
                 "modu", MODU;
-                "move", MOVE;
+                "mov", MOV;
                 "mult", MULT;
                 "multu", MULTU;
                 "mvsrr", MVSRR;
@@ -52,6 +52,8 @@
                 "nor", NOR;
                 "or", OR;
                 "ori", ORI;
+                "ret", RET;
+                "rett", RETT;
                 "sb", SB;
                 "sh", SH;
                 "sll", SLL;
@@ -65,6 +67,7 @@
                 "subiu", SUBIU;
                 "subu", SUBU;
                 "sw", SW;
+                "swap", SWAP;
                 "trap", TRAP;
                 "xor", XOR;
                 "xori", XORI;

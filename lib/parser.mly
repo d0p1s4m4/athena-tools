@@ -9,13 +9,13 @@
 %token SKIP
 (* instructions *)
 %token ADD ADDI ADDIU ADDU AND ANDI BEQ BGE BGEU
-%token BLT BLTU BNE CALL DIV DIVU JMP LIH MOD MODU MOVE
-%token MULT MULTU NOR OR ORI SLL SLLR SRA SRAR SRL SRLR
+%token BLT BLTU BNE CALL DIV DIVU JMP LIH MOD MODU
+%token MULT MULTU NOR OR ORI RETT SLL SLLR SRA SRAR SRL SRLR
 %token SUB SUBI SUBIU SUBU XOR XORI TRAP LB LBU SB LH LHU
 %token SH LW SW MVSRR MVSRW
 (* pseudo instructions *)
 %token B BEQZ BGEZ BGT BGTU BGTZ BLTZ 
-%token BNEZ LA LI NOP
+%token BNEZ LA LI MOV NOP RET SWAP
 (* register *)
 %token R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14 R15
 %token R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29
@@ -72,13 +72,15 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| LIH register COMMA immediat { Lih($2, $4) }
 	| MOD register COMMA register COMMA register { Mod($2, $4, $6) }
 	| MODU register COMMA register COMMA register { Modu($2, $4, $6) }
-	| MOVE register COMMA register { Or($2, 0, $4) }
+	| MOV register COMMA register { Add($2, $4, 0) }
 	| MULT register COMMA register COMMA register COMMA register { Mult($2, $4, $6, $8) }
 	| MULTU register COMMA register COMMA register COMMA register { Multu($2, $4, $6, $8) }
 	| NOP { Add(0, 0, 0) }
 	| NOR register COMMA register COMMA register { Nor($2, $4, $6) }
 	| OR register COMMA register COMMA register { Or($2, $4, $6) }
 	| ORI register COMMA register COMMA immediat { Ori($2, $4, $6) }
+	| RET { Jmp(RegOffset(31, 0)) }
+	| RETT { Rett }
 	| SLL register COMMA register COMMA shamt { Sll($2, $4, $6) }
 	| SLLR register COMMA register COMMA register { Sllr($2, $4, $6) }
 	| SRA register COMMA register COMMA shamt { Sra($2, $4, $6) }
@@ -100,6 +102,7 @@ instruction: ADD register COMMA register COMMA register { Add($2, $4, $6) }
 	| SB full_address COMMA register { Sb($2, $4) }
 	| SH full_address COMMA register { Sh($2, $4) }
 	| SW full_address COMMA register { Sw($2, $4) }
+	| SWAP register COMMA register { Swap($2, $4) }
 	| MVSRR register COMMA special_register { Mvsrr($2, $4) }
 	| MVSRW special_register COMMA register { Mvsrw($2, $4) }
 	;

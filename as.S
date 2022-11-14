@@ -33,7 +33,7 @@ addu r1, r2, r6
 li r8, 0xFFFF1111
 
 la r7, start
-move r5, r7
+mov r5, r7
 
 and r1, r2, r3
 
@@ -44,3 +44,7 @@ b start
 b 0x56
 
 beq r1, r2, start
+
+ret
+
+swap r5, r1

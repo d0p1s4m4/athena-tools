@@ -59,6 +59,7 @@ let dump_instruction instruction =
   | Call addr -> "call " ^ dump_abs_addr addr
   | Div (ra, rb, rc) -> "div " ^ dump_r_format ra rb rc
   | Divu (ra, rb, rc) -> "divu " ^ dump_r_format ra rb rc
+  | Jmp (RegOffset (31, 0)) -> "ret"
   | Jmp addr -> "jmp " ^ dump_abs_addr addr
   | La (ra, addr) -> "la " ^ dump_reg ra ^ ", " ^ addr
   | Lb (ra, addr) -> "lb " ^ dump_reg ra ^ ", " ^ dump_abs_addr addr
@@ -81,6 +82,7 @@ let dump_instruction instruction =
   | Nor (ra, rb, rc) -> "nor " ^ dump_r_format ra rb rc
   | Or (ra, rb, rc) -> "or " ^ dump_r_format ra rb rc
   | Ori (ra, rb, imm) -> "ori " ^ dump_i_format ra rb imm
+  | Rett -> "rett"
   | Sb (addr, ra) -> "sb " ^ dump_abs_addr addr ^ ", " ^ dump_reg ra
   | Sh (addr, ra) -> "sh " ^ dump_abs_addr addr ^ ", " ^ dump_reg ra
   | Sll (ra, rb, shamt) -> "sll " ^ dump_i_format ra rb shamt
@@ -94,6 +96,7 @@ let dump_instruction instruction =
   | Subiu (ra, rb, imm) -> "subiu " ^ dump_i_format ra rb imm
   | Subu (ra, rb, rc) -> "subu " ^ dump_r_format ra rb rc
   | Sw (addr, ra) -> "sw " ^ dump_abs_addr addr ^ ", " ^ dump_reg ra
+  | Swap (ra, rb) -> "swap " ^ dump_reg ra ^ ", " ^ dump_reg rb
   | Trap -> "trap"
   | Xor (ra, rb, rc) -> "xor " ^ dump_r_format ra rb rc
   | Xori (ra, rb, imm) -> "xori " ^ dump_i_format ra rb imm
