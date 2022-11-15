@@ -5,6 +5,6 @@
 
 (library
  (name athena)
- (modules dump opcode resolve scanner parser ast athena)
+ (modules encode dump opcode resolve scanner parser ast athena)
  (instrumentation
   (backend bisect_ppx)))
