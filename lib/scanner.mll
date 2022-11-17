@@ -48,6 +48,8 @@
                 "multu", MULTU;
                 "mvsrr", MVSRR;
                 "mvsrw", MVSRW;
+                "neg", NEG;
+                "negu", NEGU;
                 "nop", NOP;
                 "nor", NOR;
                 "or", OR;
